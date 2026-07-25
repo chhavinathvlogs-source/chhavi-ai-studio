@@ -1,127 +1,106 @@
-here<!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chhavi AI Studio - Best AI Tools Directory</title>
+  <title>Chhavi AI Studio - Login + Database</title>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:'Arial';}
-    body{background:#0f172a;color:white;}
-    .header{padding:40px 20px;text-align:center;background:linear-gradient(135deg,#667eea,#764ba2);}
-    .header h1{font-size:40px;margin-bottom:10px;}
-    .header p{opacity:0.9;font-size:18px;}
-    .container{max-width:1200px;margin:auto;padding:40px 20px;}
-    .category{margin-bottom:40px;}
-    .category h2{font-size:24px;margin-bottom:20px;border-left:4px solid #667eea;padding-left:12px;}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;}
-    .card{background:#1e293b;padding:20px;border-radius:12px;border:1px solid #334155;transition:0.3s;cursor:pointer;}
-    .card:hover{transform:translateY(-5px);border-color:#667eea;}
-    .card .icon{font-size:30px;margin-bottom:10px;}
-    .card h3{font-size:18px;margin-bottom:8px;color:#fff;}
-    .card p{font-size:14px;opacity:0.8;color:#cbd5e1;}
-    .badge{background:#667eea;padding:4px 10px;border-radius:20px;font-size:12px;display:inline-block;margin-top:10px;}
+    body{font-family:Arial;background:#f0f2f5;display:flex;justify-content:center;align-items:center;height:100vh}
+    .box{background:white;padding:30px;border-radius:10px;box-shadow:0 0 10px #ccc;width:350px;text-align:center}
+    input{width:90%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:5px}
+    button{width:95%;padding:10px;background:#1877f2;color:white;border:none;border-radius:5px;cursor:pointer;margin-top:10px}
+    #googleBtn{background:#db4437}
+    #logoutBtn{background:#555;display:none}
+    #appBox{display:none}
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>Chhavi AI Studio</h1>
-    <p>AI से दुनिया बदलो 🚀 - सभी बेस्ट AI Tools एक जगह</p>
-  </div>
 
-  <div class="container">
-    
-    <div class="category">
-      <h2>🔥 Featured by Chhavi AI</h2>
-      <div class="grid">
-        <div class="card">
-          <div class="icon">💬</div>
-          <h3>AI Chat Bot</h3>
-          <p>GPT-4 जैसा Chatbot. सवाल पूछो, जवाब पाओ</p>
-          <span class="badge">Coming Soon</span>
-        </div>
-        <div class="card">
-          <div class="icon">🖼️</div>
-          <h3>Text to Image</h3>
-          <p>सिर्फ टेक्स्ट से फोटो बनाओ 10 सेकंड में</p>
-          <span class="badge">Coming Soon</span>
-        </div>
-        <div class="card">
-          <div class="icon">🎬</div>
-          <h3>Image to Video</h3>
-          <p>फोटो को एनिमेटेड वीडियो में बदलो</p>
-          <span class="badge">Coming Soon</span>
-        </div>
-      </div>
-    </div>
+<div class="box" id="loginBox">
+  <h2>Login / Sign Up</h2>
+  <input type="email" id="email" placeholder="Email डालो">
+  <input type="password" id="password" placeholder="Password डालो">
+  <button onclick="signup()">Sign Up</button>
+  <button onclick="login()">Login</button>
+  <hr>
+  <button id="googleBtn" onclick="googleLogin()">Google से Login करो</button>
+</div>
 
-    <div class="category">
-      <h2>✨ Image & Design</h2>
-      <div class="grid">
-        <div class="card">
-          <div class="icon">🎨</div>
-          <h3>AI Image Editor</h3>
-          <p>Background हटाओ, Object बदलो</p>
-          <span class="badge">Coming Soon</span>
-        </div>
-        <div class="card">
-          <div class="icon">🔄</div>
-          <h3>Image to Image</h3>
-          <p>एक स्टाइल से दूसरी स्टाइल में बदलो</p>
-          <span class="badge">Coming Soon</span>
-        </div>
-        <div class="card">
-          <div class="icon">📝</div>
-          <h3>Prompt Templates</h3>
-          <p>1000+ रेडीमेड AI Prompts</p>
-          <span class="badge">Coming Soon</span>
-        </div>
-      </div>
-    </div>
+<div class="box" id="appBox">
+  <h2>Welcome <span id="userEmail"></span></h2>
+  <input type="text" id="dataInput" placeholder="यहां कुछ लिखो">
+  <button onclick="saveData()">Data Save करो</button>
+  <button id="logoutBtn" onclick="logout()">Logout</button>
+  <p id="status"></p>
+</div>
 
-    <div class="category">
-      <h2>🎥 Video & Audio</h2>
-      <div class="grid">
-        <div class="card">
-          <div class="icon">🎥</div>
-          <h3>Text to Video</h3>
-          <p>टेक्स्ट लिखो, AI वीडियो बना देगा</p>
-          <span class="badge">Coming Soon</span>
-        </div>
-        <div class="card">
-          <div class="icon">🎙️</div>
-          <h3>AI Voice Clone</h3>
-          <p>अपनी आवाज AI से बनाओ</p>
-          <span class="badge">Coming Soon</span>
-        </div>
-      </div>
-    </div>
+<script type="module">
+  // तुम्हारी Firebase Config
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
-    <div class="category">
-      <h2>👤 Account & Tools</h2>
-      <div class="grid">
-        <div class="card">
-          <div class="icon">🔐</div>
-          <h3>Google Login</h3>
-          <p>1 क्लिक में साइन अप करो</p>
-        </div>
-        <div class="card">
-          <div class="icon">🖼️</div>
-          <h3>My Gallery</h3>
-          <p>सारी बनाई हुई फोटो सेव रखो</p>
-        </div>
-        <div class="card">
-          <div class="icon">📜</div>
-          <h3>History</h3>
-          <p>पहले क्या बनाया था देखो</p>
-        </div>
-        <div class="card">
-          <div class="icon">💎</div>
-          <h3>PRO Membership</h3>
-          <p>अनलिमिटेड Credits + Fast Speed</p>
-        </div>
-      </div>
-    </div>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDFG_AgL319aaoTN8RyamqS7cZekQ",
+    authDomain: "chhavi-ai-studio-88086.firebaseapp.com",
+    projectId: "chhavi-ai-studio-88086",
+    storageBucket: "chhavi-ai-studio-88086.appspot.com",
+    messagingSenderId: "1222588971979",
+    appId: "1:1222588971979:web:129e97abfa9e94d3aa88bd",
+    measurementId: "G-CP92EJQKX4"
+  };
 
-  </div>
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
+  const db = getDatabase();
+  const provider = new GoogleAuthProvider();
+
+  // Login State Check
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('appBox').style.display = 'block';
+      document.getElementById('userEmail').innerText = user.email;
+    } else {
+      document.getElementById('loginBox').style.display = 'block';
+      document.getElementById('appBox').style.display = 'none';
+    }
+  });
+
+  // Functions
+  window.signup = () => {
+    const email = document.getElementById('email').value;
+    const pass = document.getElementById('password').value;
+    createUserWithEmailAndPassword(auth, email, pass)
+    .then(() => alert("Account बन गया!"))
+    .catch(e => alert(e.message));
+  }
+
+  window.login = () => {
+    const email = document.getElementById('email').value;
+    const pass = document.getElementById('password').value;
+    signInWithEmailAndPassword(auth, email, pass)
+    .catch(e => alert(e.message));
+  }
+
+  window.googleLogin = () => {
+    signInWithPopup(auth, provider).catch(e => alert(e.message));
+  }
+
+  window.logout = () => {
+    signOut(auth);
+  }
+
+  window.saveData = () => {
+    const data = document.getElementById('dataInput').value;
+    const user = auth.currentUser;
+    if(user){
+      set(ref(db, 'users/' + user.uid), {
+        data: data
+      });
+      document.getElementById('status').innerText = "Data Save हो गया Firebase में!";
+    }
+  }
+</script>
 </body>
-        </html>
+  </html>
