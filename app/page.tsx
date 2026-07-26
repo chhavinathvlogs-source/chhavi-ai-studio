@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 export default function Page() {
   const [splashVisible, setSplashVisible] = useState(true);
@@ -57,6 +58,24 @@ export default function Page() {
   };
 
   const t = translations[language];
+
+  // Feature to route mapping
+  const featureRoutes: { [key: string]: string } = {
+    '💬 AI Chat': '/ai-chat',
+    '🖼️ Text to Image': '/text-to-image',
+    '🎨 Image to Image': '/image-to-image',
+    '🎬 Image to Video': '/image-to-video',
+    '🎥 Text to Video': '/text-to-video',
+    '✨ AI Image Editor': '/image-editor',
+    '📝 Prompt Templates': '/prompt-templates',
+    '🖼️ Gallery': '/gallery',
+    '📜 History': '/history',
+    '⬇️ Downloads': '/downloads',
+    '⚙️ Settings': '/settings',
+    '👤 Profile': '/profile',
+    '💎 PRO Membership': '/pro',
+    '🎁 Daily Free Credits': '/credits',
+  };
 
   return (
     <>
@@ -262,35 +281,46 @@ export default function Page() {
                 gap: '15px',
               }}
             >
-              {t.features.map((feature, index) => (
-                <div
-                  key={index}
-                  style={{
-                    backgroundColor: 'var(--card)',
-                    padding: '20px',
-                    borderRadius: '15px',
-                    cursor: 'pointer',
-                    border: '1px solid var(--border-color)',
-                    transition: 'all 0.3s ease',
-                    textAlign: 'center',
-                    fontWeight: '500',
-                  }}
-                  onMouseOver={(e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.transform = 'translateY(-5px)';
-                    el.style.boxShadow = '0 10px 20px rgba(99, 102, 241, 0.2)';
-                    el.style.borderColor = 'var(--accent)';
-                  }}
-                  onMouseOut={(e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.transform = 'translateY(0)';
-                    el.style.boxShadow = 'none';
-                    el.style.borderColor = 'var(--border-color)';
-                  }}
-                >
-                  {feature}
-                </div>
-              ))}
+              {t.features.map((feature, index) => {
+                const route = featureRoutes[feature] || '/';
+                return (
+                  <Link
+                    key={index}
+                    href={route}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <div
+                      style={{
+                        backgroundColor: 'var(--card)',
+                        padding: '20px',
+                        borderRadius: '15px',
+                        cursor: 'pointer',
+                        border: '1px solid var(--border-color)',
+                        transition: 'all 0.3s ease',
+                        textAlign: 'center',
+                        fontWeight: '500',
+                        height: '100%',
+                      }}
+                      onMouseOver={(e) => {
+                        const el = e.currentTarget as HTMLElement;
+                        el.style.transform = 'translateY(-5px)';
+                        el.style.boxShadow = '0 10px 20px rgba(99, 102, 241, 0.2)';
+                        el.style.borderColor = 'var(--accent)';
+                        el.style.color = 'var(--accent)';
+                      }}
+                      onMouseOut={(e) => {
+                        const el = e.currentTarget as HTMLElement;
+                        el.style.transform = 'translateY(0)';
+                        el.style.boxShadow = 'none';
+                        el.style.borderColor = 'var(--border-color)';
+                        el.style.color = 'var(--text)';
+                      }}
+                    >
+                      {feature}
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
