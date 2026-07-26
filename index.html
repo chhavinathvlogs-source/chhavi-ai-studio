@@ -1,25 +1,43 @@
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBVGXFAgA_3l9IaaATnLQR6yx",
-    authDomain: "chhavi-ai-studio-880e0.firebaseapp.com",
-    projectId: "chhavi-ai-studio-880e0",
-    storageBucket: "chhavi-ai-studio-880e0.firebasestorage.app",
-    messagingSenderId: "222585971976",
-    appId: "1:222585971976:web:1290feb7a09e49c4ae38bd",
-    measurementId: "G-CYPZSEHQK4"
-  };
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chhavi AI Studio</title>
+  <style>
+    body { font-family: Arial; text-align: center; padding-top: 100px; background: #f0f0f0; }
+    button { padding: 15px 30px; font-size: 18px; background: #4285F4; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    button:hover { background: #357ae8; }
+  </style>
+</head>
+<body>
+  <h1>Chhavi AI Studio</h1>
+  <button id="loginBtn">Google से Login करो</button>
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getDatabase(app);
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-  document.getElementById("loginBtn").addEventListener("click", () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPgFag-3U1Aan3HhQ9pY",
+      authDomain: "chhavi-ai-studio-48064.firebaseapp.com",
+      projectId: "chhavi-ai-studio-48064",
+      storageBucket: "chhavi-ai-studio-48064.firebasestorage.app",
+      messagingSenderId: "725244891970",
+      appId: "1:725244891970:web:12007aeb40b0a0a0a21a0d",
+      measurementId: "G-CPWZ1QHK1",
+      databaseURL: "https://chhavi-ai-studio-48064-default-rtdb.asia-southeast1.firebasedatabase.app"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    document.getElementById("loginBtn").addEventListener("click", () => {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
         set(ref(db, 'users/' + user.uid), {
@@ -31,5 +49,7 @@
       .catch((error) => {
         alert("Error: " + error.message);
       });
-  });
-</script>
+    });
+  </script>
+</body>
+</html>
