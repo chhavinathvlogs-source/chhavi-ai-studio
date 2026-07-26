@@ -7,6 +7,29 @@ export default function Page() {
   const [splashVisible, setSplashVisible] = useState(true);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [language, setLanguage] = useState<'hi' | 'en'>('en');
+  const [particles, setParticles] = useState<Array<{ id: number; left: number; delay: number }>>([]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+
+    const savedLang = localStorage.getItem('language') as 'hi' | 'en' | null;
+    if (savedLang) {
+      setLanguage(savedLang);
+    }
+
+    // Generate particles for waterfall effect
+    const particleArray = Array.from({ length: 30 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      delay: Math.random() * 5,
+    }));
+    setParticles(particleArray);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setSplashVisible(false), 2000);
@@ -59,7 +82,6 @@ export default function Page() {
 
   const t = translations[language];
 
-  // Feature to route mapping
   const featureRoutes: { [key: string]: string } = {
     '💬 AI Chat': '/ai-chat',
     '🖼️ Text to Image': '/text-to-image',
@@ -79,6 +101,82 @@ export default function Page() {
 
   return (
     <>
+      {/* Animated Background with Waterfall Effect */}
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'var(--bg-gradient)',
+          zIndex: -1,
+          overflow: 'hidden',
+        }}
+      >
+        {/* Animated Gradient Glows */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '-50%',
+            right: '-20%',
+            width: '800px',
+            height: '800px',
+            background: 'radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%)',
+            borderRadius: '50%',
+            animation: 'float 20s ease-in-out infinite',
+            pointerEvents: 'none',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '-20%',
+            left: '-10%',
+            width: '600px',
+            height: '600px',
+            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%)',
+            borderRadius: '50%',
+            animation: 'float 25s ease-in-out infinite 2s',
+            pointerEvents: 'none',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            width: '400px',
+            height: '400px',
+            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, transparent 70%)',
+            borderRadius: '50%',
+            transform: 'translate(-50%, -50%)',
+            animation: 'float 30s ease-in-out infinite 4s',
+            pointerEvents: 'none',
+          }}
+        />
+
+        {/* Waterfall Particles */}
+        {particles.map((particle) => (
+          <div
+            key={particle.id}
+            style={{
+              position: 'absolute',
+              left: `${particle.left}%`,
+              top: '-50px',
+              width: '3px',
+              height: '3px',
+              background: `radial-gradient(circle, rgba(99, 102, 241, ${0.8 - particle.id * 0.02}) 0%, transparent 70%)`,
+              borderRadius: '50%',
+              animation: `particleFloat ${8 + Math.random() * 4}s linear infinite`,
+              animationDelay: `${particle.delay}s`,
+              boxShadow: `0 0 10px rgba(99, 102, 241, ${0.5 - particle.id * 0.01})`,
+              pointerEvents: 'none',
+            } as React.CSSProperties}
+          />
+        ))}
+      </div>
+
       {/* Splash Screen */}
       {splashVisible && (
         <div
@@ -88,7 +186,7 @@ export default function Page() {
             left: 0,
             width: '100%',
             height: '100%',
-            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+            background: 'linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f172a 100%)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
@@ -98,37 +196,76 @@ export default function Page() {
             color: 'white',
           }}
         >
-          <h1 style={{ fontSize: '3rem', marginBottom: '10px', fontWeight: 'bold' }}>🚀 CHHAVI AI</h1>
+          <div
+            style={{
+              fontSize: '3rem',
+              marginBottom: '10px',
+              fontWeight: 'bold',
+              animation: 'float 2s ease-in-out infinite',
+            }}
+          >
+            🚀 CHHAVI AI
+          </div>
           <p style={{ fontSize: '1.25rem' }}>{t.tagline}</p>
         </div>
       )}
 
-      {/* Main Dashboard */}
-      <div style={{ backgroundColor: 'var(--bg)', color: 'var(--text)', minHeight: '100vh' }}>
+      {/* Main App */}
+      <div
+        style={{
+          backgroundColor: 'var(--bg)',
+          color: 'var(--text)',
+          minHeight: '100vh',
+        }}
+      >
         {/* Navbar */}
         <nav
           style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            padding: '15px 20px',
-            backgroundColor: 'var(--card)',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+            padding: '20px 30px',
+            backdropFilter: 'blur(10px)',
+            backgroundColor: 'rgba(10, 14, 39, 0.4)',
             borderBottom: '1px solid var(--border-color)',
+            position: 'sticky',
+            top: 0,
+            zIndex: 100,
           }}
         >
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>CHHAVI AI</h2>
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <Link href="/" style={{ textDecoration: 'none', color: 'var(--accent)' }}>
+            <h1
+              style={{
+                fontSize: '1.5rem',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                animation: 'titleGlow 3s ease-in-out infinite',
+                letterSpacing: '1px',
+              }}
+            >
+              ✨ {t.appName}
+            </h1>
+          </Link>
+          <div style={{ display: 'flex', gap: '15px' }}>
             <button
               onClick={toggleTheme}
               style={{
                 padding: '8px 15px',
                 border: '1px solid var(--border-color)',
                 borderRadius: '8px',
-                backgroundColor: 'var(--bg)',
+                backgroundColor: 'transparent',
                 color: 'var(--text)',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
+                fontSize: '18px',
+              }}
+              onMouseOver={(e) => {
+                (e.target as HTMLButtonElement).style.backgroundColor = 'rgba(99, 102, 241, 0.1)';
+                (e.target as HTMLButtonElement).style.borderColor = 'var(--accent)';
+              }}
+              onMouseOut={(e) => {
+                (e.target as HTMLButtonElement).style.backgroundColor = 'transparent';
+                (e.target as HTMLButtonElement).style.borderColor = 'var(--border-color)';
               }}
             >
               {theme === 'dark' ? '☀️' : '🌙'}
@@ -139,10 +276,18 @@ export default function Page() {
                 padding: '8px 15px',
                 border: '1px solid var(--border-color)',
                 borderRadius: '8px',
-                backgroundColor: 'var(--bg)',
+                backgroundColor: 'transparent',
                 color: 'var(--text)',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
+              }}
+              onMouseOver={(e) => {
+                (e.target as HTMLButtonElement).style.backgroundColor = 'rgba(99, 102, 241, 0.1)';
+                (e.target as HTMLButtonElement).style.borderColor = 'var(--accent)';
+              }}
+              onMouseOut={(e) => {
+                (e.target as HTMLButtonElement).style.backgroundColor = 'transparent';
+                (e.target as HTMLButtonElement).style.borderColor = 'var(--border-color)';
               }}
             >
               {language === 'hi' ? 'EN' : 'हिं'}
@@ -150,179 +295,213 @@ export default function Page() {
           </div>
         </nav>
 
-        {/* Main Content */}
-        <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-          {/* Premium Team Card */}
-          <div
+        {/* Hero Section */}
+        <div
+          style={{
+            padding: '80px 30px',
+            textAlign: 'center',
+            minHeight: '60vh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <h1
             style={{
-              background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1))',
-              borderRadius: '20px',
-              padding: '40px 20px',
+              fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
+              fontWeight: 'bold',
+              marginBottom: '20px',
+              background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #06b6d4 100%)',
+              backgroundSize: '200% 200%',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              animation: 'rotateGradient 8s ease infinite, float 4s ease-in-out infinite',
+            } as React.CSSProperties}
+          >
+            {t.appName}
+          </h1>
+          <p
+            style={{
+              fontSize: 'clamp(1rem, 3vw, 1.5rem)',
+              opacity: 0.8,
               marginBottom: '40px',
-              border: '2px solid var(--accent)',
-              animation: 'glow 3s ease-in-out infinite',
+              color: 'var(--text-secondary)',
             }}
           >
-            <h2 style={{ textAlign: 'center', fontSize: '1.75rem', marginBottom: '30px', fontWeight: 'bold' }}>
-              🤝 Premium Co-Founder Team
-            </h2>
+            {t.tagline}
+          </p>
+        </div>
 
-            {/* Team Members Grid */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                gap: '20px',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              {/* Member 1 */}
+        {/* Co-Founder Section */}
+        <div
+          style={{
+            padding: '60px 30px',
+            maxWidth: '1200px',
+            margin: '0 auto',
+          }}
+        >
+          <h2
+            style={{
+              fontSize: '2.5rem',
+              fontWeight: 'bold',
+              marginBottom: '40px',
+              textAlign: 'center',
+              color: 'var(--accent)',
+            }}
+          >
+            🎭 Premium Co-Founder Team
+          </h2>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '30px',
+              marginBottom: '60px',
+            }}
+          >
+            {[
+              {
+                name: t.coFounderName1,
+                title: t.coFounderTitle,
+                emoji: '👨‍💼',
+              },
+              {
+                name: t.coFounderName2,
+                title: t.coFounderRole2,
+                emoji: '👨‍💼',
+              },
+            ].map((member, index) => (
               <div
+                key={index}
                 style={{
-                  backgroundColor: 'var(--card)',
-                  padding: '20px',
-                  borderRadius: '15px',
-                  textAlign: 'center',
-                  border: '1px solid var(--accent-light)',
-                  transition: 'all 0.3s ease',
-                }}
+                  backgroundColor: 'var(--card-glass)',
+                  backdropFilter: 'blur(20px)',
+                  padding: '30px',
+                  borderRadius: '20px',
+                  border: '1px solid var(--border-color)',
+                  cursor: 'pointer',
+                  transition: 'all 0.4s ease',
+                  animation: 'floatSlow 4s ease-in-out infinite',
+                  animationDelay: `${index * 0.5}s`,
+                } as React.CSSProperties}
                 onMouseOver={(e) => {
                   const el = e.currentTarget as HTMLElement;
-                  el.style.transform = 'translateY(-5px)';
-                  el.style.boxShadow = '0 10px 25px rgba(99, 102, 241, 0.3)';
+                  el.style.transform = 'translateY(-15px)';
+                  el.style.background = 'var(--card-glass)';
+                  el.style.boxShadow = '0 0 50px rgba(99, 102, 241, 0.4), 0 0 100px rgba(168, 85, 247, 0.2), inset 0 0 20px rgba(6, 182, 212, 0.1)';
+                  el.style.borderColor = 'rgba(99, 102, 241, 0.6)';
                 }}
                 onMouseOut={(e) => {
                   const el = e.currentTarget as HTMLElement;
                   el.style.transform = 'translateY(0)';
                   el.style.boxShadow = 'none';
+                  el.style.borderColor = 'var(--border-color)';
                 }}
               >
-                <div
-                  style={{
-                    width: '100px',
-                    height: '100px',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '3rem',
-                    margin: '0 auto 15px',
-                    border: '3px solid var(--accent)',
-                  }}
-                >
-                  👩‍💼
-                </div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '5px' }}>
-                  {t.coFounderName1}
+                <div style={{ fontSize: '3rem', marginBottom: '15px' }}>{member.emoji}</div>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '10px' }}>
+                  {member.name}
                 </h3>
-                <p style={{ color: 'var(--accent-light)', fontSize: '0.95rem', marginBottom: '10px' }}>
-                  {t.coFounderTitle}
+                <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>
+                  {member.title}
                 </p>
-                <p style={{ fontSize: '0.9rem', opacity: 0.7 }}>Leading innovation in AI</p>
               </div>
-
-              {/* Member 2 */}
-              <div
-                style={{
-                  backgroundColor: 'var(--card)',
-                  padding: '20px',
-                  borderRadius: '15px',
-                  textAlign: 'center',
-                  border: '1px solid var(--accent-light)',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseOver={(e) => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.transform = 'translateY(-5px)';
-                  el.style.boxShadow = '0 10px 25px rgba(99, 102, 241, 0.3)';
-                }}
-                onMouseOut={(e) => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.transform = 'translateY(0)';
-                  el.style.boxShadow = 'none';
-                }}
-              >
-                <div
-                  style={{
-                    width: '100px',
-                    height: '100px',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #8b5cf6, #6366f1)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '3rem',
-                    margin: '0 auto 15px',
-                    border: '3px solid var(--accent)',
-                  }}
-                >
-                  👨‍💼
-                </div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '5px' }}>
-                  {t.coFounderName2}
-                </h3>
-                <p style={{ color: 'var(--accent-light)', fontSize: '0.95rem', marginBottom: '10px' }}>
-                  {t.coFounderRole2}
-                </p>
-                <p style={{ fontSize: '0.9rem', opacity: 0.7 }}>Driving business growth</p>
-              </div>
-            </div>
+            ))}
           </div>
+        </div>
 
-          {/* Features Section */}
-          <div>
-            <h2 style={{ fontSize: '1.75rem', marginBottom: '20px', fontWeight: 'bold' }}>{t.featuresTitle}</h2>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-                gap: '15px',
-              }}
-            >
-              {t.features.map((feature, index) => {
-                const route = featureRoutes[feature] || '/';
-                return (
-                  <Link
-                    key={index}
-                    href={route}
-                    style={{ textDecoration: 'none' }}
+        {/* AI Features Section */}
+        <div
+          style={{
+            padding: '60px 30px',
+            maxWidth: '1400px',
+            margin: '0 auto',
+          }}
+        >
+          <h2
+            style={{
+              fontSize: '2.5rem',
+              fontWeight: 'bold',
+              marginBottom: '50px',
+              textAlign: 'center',
+              background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent-purple) 50%, var(--accent-cyan) 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            } as React.CSSProperties}
+          >
+            🚀 {t.featuresTitle}
+          </h2>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '20px',
+            }}
+          >
+            {t.features.map((feature, index) => {
+              const route = featureRoutes[feature] || '/';
+              return (
+                <Link key={index} href={route} style={{ textDecoration: 'none' }}>
+                  <div
+                    style={{
+                      backgroundColor: 'var(--card-glass)',
+                      backdropFilter: 'blur(20px)',
+                      padding: '25px',
+                      borderRadius: '15px',
+                      cursor: 'pointer',
+                      border: '1px solid var(--border-color)',
+                      transition: 'all 0.3s ease',
+                      textAlign: 'center',
+                      fontWeight: '500',
+                      height: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    onMouseOver={(e) => {
+                      const el = e.currentTarget as HTMLElement;
+                      el.style.transform = 'translateY(-10px) scale(1.05)';
+                      el.style.background = 'rgba(15, 23, 42, 0.8)';
+                      el.style.boxShadow = '0 0 40px rgba(99, 102, 241, 0.6), 0 0 80px rgba(168, 85, 247, 0.3), inset 0 0 20px rgba(6, 182, 212, 0.15)';
+                      el.style.borderColor = 'rgba(99, 102, 241, 0.8)';
+                      el.style.color = 'var(--accent-cyan)';
+                    }}
+                    onMouseOut={(e) => {
+                      const el = e.currentTarget as HTMLElement;
+                      el.style.transform = 'translateY(0) scale(1)';
+                      el.style.background = 'var(--card-glass)';
+                      el.style.boxShadow = 'none';
+                      el.style.borderColor = 'var(--border-color)';
+                      el.style.color = 'var(--text)';
+                    }}
                   >
-                    <div
-                      style={{
-                        backgroundColor: 'var(--card)',
-                        padding: '20px',
-                        borderRadius: '15px',
-                        cursor: 'pointer',
-                        border: '1px solid var(--border-color)',
-                        transition: 'all 0.3s ease',
-                        textAlign: 'center',
-                        fontWeight: '500',
-                        height: '100%',
-                      }}
-                      onMouseOver={(e) => {
-                        const el = e.currentTarget as HTMLElement;
-                        el.style.transform = 'translateY(-5px)';
-                        el.style.boxShadow = '0 10px 20px rgba(99, 102, 241, 0.2)';
-                        el.style.borderColor = 'var(--accent)';
-                        el.style.color = 'var(--accent)';
-                      }}
-                      onMouseOut={(e) => {
-                        const el = e.currentTarget as HTMLElement;
-                        el.style.transform = 'translateY(0)';
-                        el.style.boxShadow = 'none';
-                        el.style.borderColor = 'var(--border-color)';
-                        el.style.color = 'var(--text)';
-                      }}
-                    >
-                      {feature}
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
+                    <span style={{ fontSize: '1.1rem' }}>{feature}</span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
+        </div>
+
+        {/* Footer */}
+        <div
+          style={{
+            padding: '40px 30px',
+            textAlign: 'center',
+            borderTop: '1px solid var(--border-color)',
+            marginTop: '60px',
+            color: 'var(--text-secondary)',
+            backdropFilter: 'blur(10px)',
+          }}
+        >
+          <p>
+            © 2026 {t.appName} | Powered by AI ✨
+          </p>
         </div>
       </div>
     </>
