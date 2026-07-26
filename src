@@ -1,0 +1,19 @@
+import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getAnalytics } from "firebase/analytics";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBVXGFAgA_3I9iaaThlOR6yxeaT5Jf2eko",
+  authDomain: "chhavi-ai-studio-880e0.firebaseapp.com",
+  databaseURL: "https://chhavi-ai-studio-880e0-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "chhavi-ai-studio-880e0",
+  storageBucket: "chhavi-ai-studio-880e0.firebasestorage.app",
+  messagingSenderId: "222585971976",
+  appId: "1:222585971976:web:1290feb7a09e49c4ae38bd",
+  measurementId: "G-CYPZSEHQK4"
+};
+
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();
+const analytics = getAnalytics(app);
