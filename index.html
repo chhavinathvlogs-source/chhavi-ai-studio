@@ -1,25 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Chhavi AI Studio</title>
-</head>
-<body>
-  <h1>Chhavi AI Studio</h1>
-  <button id="loginBtn">Google से Login करो</button>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-  <script type="module">
-    // यहाँ तुम्हारा firebaseConfig
-    const firebaseConfig = {
-      apiKey: "AIzaSyBVGXFAgA_3l9IaaATnLQR6yx",
-      authDomain: "chhavi-ai-studio-880e0.firebaseapp.com",
-      projectId: "chhavi-ai-studio-880e0",
-      storageBucket: "chhavi-ai-studio-880e0.firebasestorage.app",
-      messagingSenderId: "222585971976",
-      appId: "1:222585971976:web:1290feb7a09e49c4ae38bd",
-      measurementId: "G-CYPZSEHQK4"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyBVGXFAgA_3l9IaaATnLQR6yx",
+    authDomain: "chhavi-ai-studio-880e0.firebaseapp.com",
+    projectId: "chhavi-ai-studio-880e0",
+    storageBucket: "chhavi-ai-studio-880e0.firebasestorage.app",
+    messagingSenderId: "222585971976",
+    appId: "1:222585971976:web:1290feb7a09e49c4ae38bd",
+    measurementId: "G-CYPZSEHQK4"
+  };
 
-    // यहाँ Login और Database वाला कोड आएगा
-  </script>
-</body>
-</html>
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  document.getElementById("loginBtn").addEventListener("click", () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        set(ref(db, 'users/' + user.uid), {
+          name: user.displayName,
+          email: user.email
+        });
+        alert("Login हो गया और डेटा Save हो गया!");
+      })
+      .catch((error) => {
+        alert("Error: " + error.message);
+      });
+  });
+</script>
