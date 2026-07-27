@@ -7,7 +7,6 @@ export default function Page() {
   const [splashVisible, setSplashVisible] = useState(true);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [language, setLanguage] = useState<'hi' | 'en'>('en');
-  const [particles, setParticles] = useState<Array<{ id: number; left: number; delay: number }>>([]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -21,14 +20,6 @@ export default function Page() {
     if (savedLang) {
       setLanguage(savedLang);
     }
-
-    // Generate particles for waterfall effect
-    const particleArray = Array.from({ length: 30 }, (_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      delay: Math.random() * 5,
-    }));
-    setParticles(particleArray);
   }, []);
 
   useEffect(() => {
@@ -48,14 +39,6 @@ export default function Page() {
   useEffect(() => {
     localStorage.setItem('language', language);
   }, [language]);
-
-  const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-  };
-
-  const toggleLanguage = () => {
-    setLanguage(language === 'hi' ? 'en' : 'hi');
-  };
 
   const translations = {
     en: {
@@ -82,101 +65,34 @@ export default function Page() {
 
   const t = translations[language];
 
-  const featureRoutes: { [key: string]: string } = {
-    '💬 AI Chat': '/ai-chat',
-    '🖼️ Text to Image': '/text-to-image',
-    '🎨 Image to Image': '/image-to-image',
-    '🎬 Image to Video': '/image-to-video',
-    '🎥 Text to Video': '/text-to-video',
-    '✨ AI Image Editor': '/image-editor',
-    '📝 Prompt Templates': '/prompt-templates',
-    '🖼️ Gallery': '/gallery',
-    '📜 History': '/history',
-    '⬇️ Downloads': '/downloads',
-    '⚙️ Settings': '/settings',
-    '👤 Profile': '/profile',
-    '💎 PRO Membership': '/pro',
-    '🎁 Daily Free Credits': '/credits',
+  // Feature to route mapping with gradient colors
+  const featureRoutes: { [key: string]: { route: string; gradient: string } } = {
+    '💬 AI Chat': { route: '/ai-chat', gradient: 'linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)' },
+    '🖼️ Text to Image': { route: '/text-to-image', gradient: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)' },
+    '🎨 Image to Image': { route: '/image-to-image', gradient: 'linear-gradient(135deg, #ec4899 0%, #f472b6 100%)' },
+    '🎬 Image to Video': { route: '/image-to-video', gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)' },
+    '🎥 Text to Video': { route: '/text-to-video', gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)' },
+    '✨ AI Image Editor': { route: '/image-editor', gradient: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)' },
+    '📝 Prompt Templates': { route: '/prompt-templates', gradient: 'linear-gradient(135deg, #06b6d4 0%, #14b8a6 100%)' },
+    '🖼️ Gallery': { route: '/gallery', gradient: 'linear-gradient(135deg, #f472b6 0%, #ec4899 100%)' },
+    '📜 History': { route: '/history', gradient: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)' },
+    '⬇️ Downloads': { route: '/downloads', gradient: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)' },
+    '⚙️ Settings': { route: '/settings', gradient: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)' },
+    '👤 Profile': { route: '/profile', gradient: 'linear-gradient(135deg, #14b8a6 0%, #06b6d4 100%)' },
+    '💎 PRO Membership': { route: '/pro', gradient: 'linear-gradient(135deg, #fbbf24 0%, #fcd34d 100%)' },
+    '🎁 Daily Free Credits': { route: '/credits', gradient: 'linear-gradient(135deg, #ec4899 0%, #a855f7 100%)' },
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'hi' ? 'en' : 'hi');
   };
 
   return (
     <>
-      {/* Animated Background with Waterfall Effect */}
-      <div
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          background: 'var(--bg-gradient)',
-          zIndex: -1,
-          overflow: 'hidden',
-        }}
-      >
-        {/* Animated Gradient Glows */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '-50%',
-            right: '-20%',
-            width: '800px',
-            height: '800px',
-            background: 'radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%)',
-            borderRadius: '50%',
-            animation: 'float 20s ease-in-out infinite',
-            pointerEvents: 'none',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '-20%',
-            left: '-10%',
-            width: '600px',
-            height: '600px',
-            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%)',
-            borderRadius: '50%',
-            animation: 'float 25s ease-in-out infinite 2s',
-            pointerEvents: 'none',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            width: '400px',
-            height: '400px',
-            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, transparent 70%)',
-            borderRadius: '50%',
-            transform: 'translate(-50%, -50%)',
-            animation: 'float 30s ease-in-out infinite 4s',
-            pointerEvents: 'none',
-          }}
-        />
-
-        {/* Waterfall Particles */}
-        {particles.map((particle) => (
-          <div
-            key={particle.id}
-            style={{
-              position: 'absolute',
-              left: `${particle.left}%`,
-              top: '-50px',
-              width: '3px',
-              height: '3px',
-              background: `radial-gradient(circle, rgba(99, 102, 241, ${0.8 - particle.id * 0.02}) 0%, transparent 70%)`,
-              borderRadius: '50%',
-              animation: `particleFloat ${8 + Math.random() * 4}s linear infinite`,
-              animationDelay: `${particle.delay}s`,
-              boxShadow: `0 0 10px rgba(99, 102, 241, ${0.5 - particle.id * 0.01})`,
-              pointerEvents: 'none',
-            } as React.CSSProperties}
-          />
-        ))}
-      </div>
-
       {/* Splash Screen */}
       {splashVisible && (
         <div
@@ -186,7 +102,7 @@ export default function Page() {
             left: 0,
             width: '100%',
             height: '100%',
-            background: 'linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f172a 100%)',
+            background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #06b6d4 100%)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
@@ -196,314 +112,229 @@ export default function Page() {
             color: 'white',
           }}
         >
-          <div
-            style={{
-              fontSize: '3rem',
-              marginBottom: '10px',
-              fontWeight: 'bold',
-              animation: 'float 2s ease-in-out infinite',
-            }}
-          >
-            🚀 CHHAVI AI
-          </div>
+          <h1 style={{ fontSize: '3rem', marginBottom: '10px', fontWeight: 'bold' }}>🚀 CHHAVI AI</h1>
           <p style={{ fontSize: '1.25rem' }}>{t.tagline}</p>
         </div>
       )}
 
       {/* Main App */}
-      <div
-        style={{
-          backgroundColor: 'var(--bg)',
-          color: 'var(--text)',
-          minHeight: '100vh',
-        }}
-      >
-        {/* Navbar */}
-        <nav
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '20px 30px',
-            backdropFilter: 'blur(10px)',
-            backgroundColor: 'rgba(10, 14, 39, 0.4)',
-            borderBottom: '1px solid var(--border-color)',
-            position: 'sticky',
-            top: 0,
-            zIndex: 100,
-          }}
-        >
-          <Link href="/" style={{ textDecoration: 'none', color: 'var(--accent)' }}>
-            <h1
-              style={{
-                fontSize: '1.5rem',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                animation: 'titleGlow 3s ease-in-out infinite',
-                letterSpacing: '1px',
-              }}
-            >
-              ✨ {t.appName}
-            </h1>
-          </Link>
-          <div style={{ display: 'flex', gap: '15px' }}>
-            <button
-              onClick={toggleTheme}
-              style={{
-                padding: '8px 15px',
-                border: '1px solid var(--border-color)',
-                borderRadius: '8px',
-                backgroundColor: 'transparent',
-                color: 'var(--text)',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                fontSize: '18px',
-              }}
-              onMouseOver={(e) => {
-                (e.target as HTMLButtonElement).style.backgroundColor = 'rgba(99, 102, 241, 0.1)';
-                (e.target as HTMLButtonElement).style.borderColor = 'var(--accent)';
-              }}
-              onMouseOut={(e) => {
-                (e.target as HTMLButtonElement).style.backgroundColor = 'transparent';
-                (e.target as HTMLButtonElement).style.borderColor = 'var(--border-color)';
-              }}
-            >
-              {theme === 'dark' ? '☀️' : '🌙'}
-            </button>
-            <button
-              onClick={toggleLanguage}
-              style={{
-                padding: '8px 15px',
-                border: '1px solid var(--border-color)',
-                borderRadius: '8px',
-                backgroundColor: 'transparent',
-                color: 'var(--text)',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseOver={(e) => {
-                (e.target as HTMLButtonElement).style.backgroundColor = 'rgba(99, 102, 241, 0.1)';
-                (e.target as HTMLButtonElement).style.borderColor = 'var(--accent)';
-              }}
-              onMouseOut={(e) => {
-                (e.target as HTMLButtonElement).style.backgroundColor = 'transparent';
-                (e.target as HTMLButtonElement).style.borderColor = 'var(--border-color)';
-              }}
-            >
-              {language === 'hi' ? 'EN' : 'हिं'}
-            </button>
-          </div>
-        </nav>
-
-        {/* Hero Section */}
-        <div
-          style={{
-            padding: '80px 30px',
-            textAlign: 'center',
-            minHeight: '60vh',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <h1
-            style={{
-              fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
-              fontWeight: 'bold',
-              marginBottom: '20px',
-              background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #06b6d4 100%)',
-              backgroundSize: '200% 200%',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              animation: 'rotateGradient 8s ease infinite, float 4s ease-in-out infinite',
-            } as React.CSSProperties}
-          >
-            {t.appName}
-          </h1>
-          <p
-            style={{
-              fontSize: 'clamp(1rem, 3vw, 1.5rem)',
-              opacity: 0.8,
-              marginBottom: '40px',
-              color: 'var(--text-secondary)',
-            }}
-          >
-            {t.tagline}
-          </p>
+      <div className="premium-gradient-bg" style={{ minHeight: '100vh', color: 'var(--text)', position: 'relative', overflow: 'hidden' }}>
+        {/* Animated Floating Orbs Background */}
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}>
+          <div className="floating-orb orb-cyan" style={{ top: '10%', left: '10%' }}></div>
+          <div className="floating-orb orb-purple" style={{ top: '60%', right: '15%' }}></div>
+          <div className="floating-orb orb-gold" style={{ bottom: '10%', left: '50%', transform: 'translateX(-50%)' }}></div>
         </div>
 
-        {/* Co-Founder Section */}
-        <div
-          style={{
-            padding: '60px 30px',
-            maxWidth: '1200px',
-            margin: '0 auto',
-          }}
-        >
-          <h2
+        {/* Content Container */}
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          {/* Navigation Bar */}
+          <nav
             style={{
-              fontSize: '2.5rem',
-              fontWeight: 'bold',
-              marginBottom: '40px',
-              textAlign: 'center',
-              color: 'var(--accent)',
+              background: 'rgba(10, 14, 39, 0.6)',
+              backdropFilter: 'blur(10px)',
+              borderBottom: '1px solid rgba(99, 102, 241, 0.2)',
+              padding: '1.5rem 2rem',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              position: 'sticky',
+              top: 0,
+              zIndex: 50,
             }}
           >
-            🎭 Premium Co-Founder Team
-          </h2>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '30px',
-              marginBottom: '60px',
-            }}
-          >
-            {[
-              {
-                name: t.coFounderName1,
-                title: t.coFounderTitle,
-                emoji: '👨‍💼',
-              },
-              {
-                name: t.coFounderName2,
-                title: t.coFounderRole2,
-                emoji: '👨‍💼',
-              },
-            ].map((member, index) => (
-              <div
-                key={index}
+            <h2 className="gradient-title" style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>
+              {t.appName}
+            </h2>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button
+                onClick={toggleTheme}
                 style={{
-                  backgroundColor: 'var(--card-glass)',
-                  backdropFilter: 'blur(20px)',
-                  padding: '30px',
-                  borderRadius: '20px',
-                  border: '1px solid var(--border-color)',
+                  padding: '0.5rem 1rem',
+                  border: '1px solid rgba(99, 102, 241, 0.3)',
+                  borderRadius: '0.5rem',
+                  backgroundColor: 'rgba(30, 41, 59, 0.5)',
+                  color: 'var(--text)',
                   cursor: 'pointer',
-                  transition: 'all 0.4s ease',
-                  animation: 'floatSlow 4s ease-in-out infinite',
-                  animationDelay: `${index * 0.5}s`,
-                } as React.CSSProperties}
+                  transition: 'all 0.3s ease',
+                  backdropFilter: 'blur(10px)',
+                }}
                 onMouseOver={(e) => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.transform = 'translateY(-15px)';
-                  el.style.background = 'var(--card-glass)';
-                  el.style.boxShadow = '0 0 50px rgba(99, 102, 241, 0.4), 0 0 100px rgba(168, 85, 247, 0.2), inset 0 0 20px rgba(6, 182, 212, 0.1)';
-                  el.style.borderColor = 'rgba(99, 102, 241, 0.6)';
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(99, 102, 241, 0.6)';
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(30, 41, 59, 0.7)';
                 }}
                 onMouseOut={(e) => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.transform = 'translateY(0)';
-                  el.style.boxShadow = 'none';
-                  el.style.borderColor = 'var(--border-color)';
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(99, 102, 241, 0.3)';
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(30, 41, 59, 0.5)';
                 }}
               >
-                <div style={{ fontSize: '3rem', marginBottom: '15px' }}>{member.emoji}</div>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '10px' }}>
-                  {member.name}
-                </h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>
-                  {member.title}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
+                {theme === 'dark' ? '☀️' : '🌙'}
+              </button>
+              <button
+                onClick={toggleLanguage}
+                style={{
+                  padding: '0.5rem 1rem',
+                  border: '1px solid rgba(99, 102, 241, 0.3)',
+                  borderRadius: '0.5rem',
+                  backgroundColor: 'rgba(30, 41, 59, 0.5)',
+                  color: 'var(--text)',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  backdropFilter: 'blur(10px)',
+                }}
+                onMouseOver={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(99, 102, 241, 0.6)';
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(30, 41, 59, 0.7)';
+                }}
+                onMouseOut={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(99, 102, 241, 0.3)';
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(30, 41, 59, 0.5)';
+                }}
+              >
+                {language === 'hi' ? 'EN' : 'हिं'}
+              </button>
+            </div>
+          </nav>
 
-        {/* AI Features Section */}
-        <div
-          style={{
-            padding: '60px 30px',
-            maxWidth: '1400px',
-            margin: '0 auto',
-          }}
-        >
-          <h2
-            style={{
-              fontSize: '2.5rem',
-              fontWeight: 'bold',
-              marginBottom: '50px',
-              textAlign: 'center',
-              background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent-purple) 50%, var(--accent-cyan) 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            } as React.CSSProperties}
-          >
-            🚀 {t.featuresTitle}
-          </h2>
-
+          {/* Hero Section */}
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              textAlign: 'center',
+              padding: '4rem 2rem',
+              minHeight: '60vh',
             }}
           >
-            {t.features.map((feature, index) => {
-              const route = featureRoutes[feature] || '/';
-              return (
-                <Link key={index} href={route} style={{ textDecoration: 'none' }}>
-                  <div
-                    style={{
-                      backgroundColor: 'var(--card-glass)',
-                      backdropFilter: 'blur(20px)',
-                      padding: '25px',
-                      borderRadius: '15px',
-                      cursor: 'pointer',
-                      border: '1px solid var(--border-color)',
-                      transition: 'all 0.3s ease',
-                      textAlign: 'center',
-                      fontWeight: '500',
-                      height: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                    onMouseOver={(e) => {
-                      const el = e.currentTarget as HTMLElement;
-                      el.style.transform = 'translateY(-10px) scale(1.05)';
-                      el.style.background = 'rgba(15, 23, 42, 0.8)';
-                      el.style.boxShadow = '0 0 40px rgba(99, 102, 241, 0.6), 0 0 80px rgba(168, 85, 247, 0.3), inset 0 0 20px rgba(6, 182, 212, 0.15)';
-                      el.style.borderColor = 'rgba(99, 102, 241, 0.8)';
-                      el.style.color = 'var(--accent-cyan)';
-                    }}
-                    onMouseOut={(e) => {
-                      const el = e.currentTarget as HTMLElement;
-                      el.style.transform = 'translateY(0) scale(1)';
-                      el.style.background = 'var(--card-glass)';
-                      el.style.boxShadow = 'none';
-                      el.style.borderColor = 'var(--border-color)';
-                      el.style.color = 'var(--text)';
-                    }}
-                  >
-                    <span style={{ fontSize: '1.1rem' }}>{feature}</span>
-                  </div>
-                </Link>
-              );
-            })}
+            <h1 className="gradient-title fade-in-up" style={{ fontSize: '4rem', fontWeight: 'bold', marginBottom: '1rem', lineHeight: 1.2 }}>
+              {t.appName}
+            </h1>
+            <p className="fade-in-up" style={{ fontSize: '1.5rem', color: '#06b6d4', marginBottom: '2rem', animation: 'fadeInUp 0.8s ease-out 0.2s both' }}>
+              {t.tagline}
+            </p>
           </div>
-        </div>
 
-        {/* Footer */}
-        <div
-          style={{
-            padding: '40px 30px',
-            textAlign: 'center',
-            borderTop: '1px solid var(--border-color)',
-            marginTop: '60px',
-            color: 'var(--text-secondary)',
-            backdropFilter: 'blur(10px)',
-          }}
-        >
-          <p>
-            © 2026 {t.appName} | Powered by AI ✨
-          </p>
+          {/* Premium Co-Founder Team Section */}
+          <div style={{ padding: '3rem 2rem' }}>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: 'bold', textAlign: 'center', marginBottom: '3rem', color: 'var(--text)' }}>
+              {t.coFounderTitle}
+            </h2>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: '2rem',
+                maxWidth: '900px',
+                margin: '0 auto',
+              }}
+            >
+              {[
+                { name: t.coFounderName1, role: t.coFounderTitle, emoji: '👨‍💼' },
+                { name: t.coFounderName2, role: t.coFounderRole2, emoji: '👨‍💼' },
+              ].map((founder, index) => (
+                <div
+                  key={index}
+                  className="glassmorphic-card"
+                  style={{
+                    padding: '2rem',
+                    borderRadius: '1.5rem',
+                    textAlign: 'center',
+                    transform: 'translateZ(0)',
+                  }}
+                  onMouseOver={(e) => {
+                    (e.currentTarget as HTMLElement).style.transform = 'translateY(-10px) scale(1.02)';
+                  }}
+                  onMouseOut={(e) => {
+                    (e.currentTarget as HTMLElement).style.transform = 'translateY(0) scale(1)';
+                  }}
+                >
+                  <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>{founder.emoji}</div>
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>{founder.name}</h3>
+                  <p style={{ color: '#cbd5e1', fontSize: '1rem' }}>{founder.role}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* AI Features Section */}
+          <div style={{ padding: '3rem 2rem' }}>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: 'bold', textAlign: 'center', marginBottom: '3rem', color: 'var(--text)' }}>
+              {t.featuresTitle}
+            </h2>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '1.5rem',
+                maxWidth: '1200px',
+                margin: '0 auto',
+                padding: '0 1rem',
+              }}
+            >
+              {t.features.map((feature, index) => {
+                const featureData = featureRoutes[feature] || { route: '/', gradient: 'linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)' };
+                return (
+                  <Link
+                    key={index}
+                    href={featureData.route}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <div
+                      className="feature-btn-gradient"
+                      style={{
+                        background: featureData.gradient,
+                        padding: '1.5rem',
+                        borderRadius: '1rem',
+                        cursor: 'pointer',
+                        border: 'none',
+                        color: 'white',
+                        fontWeight: '600',
+                        fontSize: '1rem',
+                        textAlign: 'center',
+                        transition: 'all 0.3s ease',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
+                      }}
+                      onMouseOver={(e) => {
+                        const el = e.currentTarget as HTMLElement;
+                        el.style.transform = 'translateY(-8px) scale(1.05)';
+                        el.style.boxShadow = '0 0 30px currentColor, 0 8px 20px rgba(0, 0, 0, 0.5)';
+                      }}
+                      onMouseOut={(e) => {
+                        const el = e.currentTarget as HTMLElement;
+                        el.style.transform = 'translateY(0) scale(1)';
+                        el.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.3)';
+                      }}
+                    >
+                      {feature}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Footer Spacing */}
+          <div style={{ height: '4rem' }}></div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes fadeOut {
+          0% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+            visibility: hidden;
+          }
+        }
+      `}</style>
     </>
   );
 }

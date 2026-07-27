@@ -291,3 +291,149 @@ html.light {
     text-shadow: 0 0 40px rgba(99, 102, 241, 0.8), 0 0 80px rgba(168, 85, 247, 0.5), 0 0 100px rgba(6, 182, 212, 0.3);
   }
 }
+
+/* Premium Luxury Design Animations */
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes orbGlow1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(30px, -30px) scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes orbGlow2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(-40px, 40px) scale(0.9);
+    opacity: 0.7;
+  }
+}
+
+@keyframes orbGlow3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(20px, 50px) scale(1.05);
+    opacity: 0.75;
+  }
+}
+
+@keyframes rainbowGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.8), 0 0 40px rgba(99, 102, 241, 0.5);
+  }
+  25% {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.8), 0 0 40px rgba(168, 85, 247, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.8), 0 0 40px rgba(236, 72, 153, 0.5);
+  }
+  75% {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.8), 0 0 40px rgba(6, 182, 212, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.8), 0 0 40px rgba(251, 191, 36, 0.5);
+  }
+}
+
+/* Premium styles */
+.premium-gradient-bg {
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 25%, #0f172a 50%, #1a1530 75%, #0a0e27 100%);
+  background-size: 200% 200%;
+  animation: gradientFlow 8s ease infinite;
+}
+
+.gradient-title {
+  background: linear-gradient(90deg, #a855f7 0%, #ec4899 30%, #fbbf24 60%, #a855f7 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientFlow 4s ease infinite, float 4s ease-in-out infinite;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.floating-orb {
+  position: absolute;
+  filter: blur(40px);
+  border-radius: 50%;
+  mix-blend-mode: screen;
+}
+
+.orb-cyan {
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.8) 0%, rgba(6, 182, 212, 0) 70%);
+  width: 300px;
+  height: 300px;
+  animation: orbGlow1 8s ease-in-out infinite;
+}
+
+.orb-purple {
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, rgba(168, 85, 247, 0) 70%);
+  width: 400px;
+  height: 400px;
+  animation: orbGlow2 10s ease-in-out infinite;
+}
+
+.orb-gold {
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.5) 0%, rgba(251, 191, 36, 0) 70%);
+  width: 350px;
+  height: 350px;
+  animation: orbGlow3 12s ease-in-out infinite;
+}
+
+.glassmorphic-card {
+  background: rgba(30, 41, 59, 0.15);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  transition: all 0.3s ease;
+}
+
+.glassmorphic-card:hover {
+  background: rgba(30, 41, 59, 0.25);
+  border: 1px solid rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 40px rgba(99, 102, 241, 0.3), inset 0 0 30px rgba(168, 85, 247, 0.1);
+}
+
+.feature-btn-gradient {
+  background-size: 200% 200%;
+  transition: all 0.3s ease;
+}
+
+.feature-btn-gradient:hover {
+  animation: rainbowGlow 2s ease infinite;
+  transform: translateY(-5px) scale(1.05);
+}
